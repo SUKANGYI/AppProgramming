@@ -1,0 +1,80 @@
+.gowun-batang-regular {
+    font-family: "Gowun Batang", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    font-family: "Gowun Batang", serif;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container {
+    max-width: 1000px; /* 부모의 최대 너비 */
+    margin: 100px auto; /* 화면 가운데 정렬 */
+    padding: 10px;
+}
+
+.images {
+    display: flex;
+    justify-content: center; /* 이미지 중앙 정렬 */
+}
+
+.images img {
+    width: 25%; /* 네 개의 이미지가 동일 비율로 배치 */
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.text-section {
+    max-width: calc(25% * 4); /* 이미지와 동일한 크기로 제한 */
+    padding: 30px 30px;
+    margin: 50px auto;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.text-section h2 {
+    font-size: 3em;
+    margin-bottom: 30px;
+    color: rgb(52, 114, 180);
+}
+.text-section p {
+    font-size: 1.8em;
+    margin: 30px auto;
+    color: #555;
+}
+.backBtn-container {
+    margin-top: 20px; /* 충분한 여백을 추가 */
+    text-align: center; /* 버튼이 중앙에 정렬되도록 */
+}
+
+.testBtn,
+.budgetBtn {
+    display: block; /* 블록 요소로 설정하여 수직으로 쌓이게 함 */
+    margin: 20px auto; /* 수직과 수평 중앙 정렬 */
+    padding: 20px;
+    width: 20vw;
+    font-size: 1.8em;
+    text-align: center;
+    cursor: pointer;
+    background-color: #1f4063b7;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.testBtn:hover,
+.budgetBtn:hover {
+    background-color: #2b69ac;
+    transform: scale(1.05);
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>힐링 여행 코스 예산 계산</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../CSSs/Budget.css" />
+</head>
+<body>
+    <h1>힐링 여행 코스 예산 계산</h1>
+    <p style="text-align: center; font-size: 18px; line-height: 1.2; margin-bottom: 5px;">원하는 코스를 선택하고 인원수를 입력하세요</p>
+    <p style="text-align: center; font-size: 15px; line-height: 1.2; margin-top: 0; color:#494cff">( ※ 참고: 예산 금액은 대략적인 추정치로, 실제 비용과 차이가 있을 수 있습니다 ) </p>
+
+    <div class="course-container">
+        <div class="course">
+            <img src="../images/Healing_Info/Healing_forest.jpg" alt="편백나무 숲 이미지"> <!-- 편백나무 숲 이미지 -->
+            <input type="checkbox" id="forest" data-price="0">
+            <label for="forest">1. 편백나무 숲</label>
+            <input type="number" id="forest-people" placeholder="인원수" min="1">
+            <p>1인 기준 0원으로 예산을 설정했습니다</p>
+        </div>
+
+        <div class="course">
+            <img src="../images/Healing_Info/Healing_mtcafe.jpg" alt="선류산장 카페 이미지"> <!-- 선류산장 카페 이미지 -->
+            <input type="checkbox" id="cafe" data-price="10000">
+            <label for="cafe">2. 선류산장 카페</label>
+            <input type="number" id="cafe-people" placeholder="인원수" min="1">
+            <p>1인 기준 10,000원으로 예산을 설정했습니다</p>
+        </div>
+
+        <div class="course">
+            <img src="../images/Healing_Info/Healing_bookcafe.jpg" alt="기북사람들 북카페 이미지"> <!-- 기북사람들 북카페 이미지 -->
+            <input type="checkbox" id="bookcafe" data-price="10000">
+            <label for="bookcafe">3. 기북사람들 북카페</label>
+            <input type="number" id="bookcafe-people" placeholder="인원수" min="1">
+            <p>1인 기준 10,000원으로 예산을 설정했습니다</p>
+        </div>
+
+        <div class="course">
+            <img src="../images/Healing_Info/Healing_food.jpg" alt="오복식당 이미지"> <!-- 오복식당 이미지 -->
+            <input type="checkbox" id="food" data-price="9000">
+            <label for="food">4. 오복식당</label>
+            <input type="number" id="food-people" placeholder="인원수" min="1">
+            <p>1인 기준 9,000원으로 예산을 설정했습니다</p>
+        </div>
+    </div>
+    
+    <div class="button-container">
+    <button class="calculate-button" onclick="calculateBudget()">결과 보기</button>
+    <button class="reset-button" onclick="resetForm()">초기화 하기</button>
+    </div>
+    <div id="result" class="result"></div>
+    <div class="backBtn-container">
+        <a href="../index.html" class="testBtn">메인 페이지로 돌아가기</a>
+    </div>
+<script>
+    function calculateBudget() {
+        let totalBudget = 0;
+        let validSelection = true;
+        const resultDiv = document.getElementById("result");
+        resultDiv.textContent = ""; // 초기화
+    
+        const courses = [
+            { id: "forest", peopleId: "forest-people" },
+            { id: "cafe", peopleId: "cafe-people" },
+            { id: "bookcafe", peopleId: "bookcafe-people" },
+            { id: "food", peopleId: "food-people" }
+        ];
+    
+        courses.forEach(course => {
+            const checkbox = document.getElementById(course.id);
+            const peopleInput = document.getElementById(course.peopleId);
+            const people = parseInt(peopleInput.value || 0);
+    
+            if (checkbox.checked) {
+                if (people > 0) {
+                    const price = parseInt(checkbox.dataset.price);
+                    totalBudget += price * people;
+                } else {
+                    validSelection = false;
+                }
+            } else if (people > 0) {
+                validSelection = false;
+            }
+        });
+    
+        // 결과 출력
+        if (validSelection && totalBudget >= 0) {
+            resultDiv.textContent = `총 예산: ${totalBudget.toLocaleString()}원`;
+            resultDiv.style.color = totalBudget === 0 ? "blue" : "green"; 
+        } else {
+            resultDiv.textContent = "코스를 선택 후 인원을 입력해주세요";
+            resultDiv.style.color = "red";
+        }
+    }
+    
+    function resetForm() {
+        document.querySelectorAll("input[type='checkbox']").forEach(checkbox => (checkbox.checked = false));
+        document.querySelectorAll("input[type='number']").forEach(input => (input.value = ""));
+        document.getElementById("result").textContent = "";
+    }
+   </script> 
+</body>
+</html>
+
+
+
+

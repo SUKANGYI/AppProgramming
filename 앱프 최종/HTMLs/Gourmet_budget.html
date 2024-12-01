@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>맛집 여행 코스 예산 계산</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="../CSSs/Budget.css" />
+    </head>
+    <body>
+        <h1>맛집 여행 코스 예산 계산</h1>
+        <p style="text-align: center; font-size: 18px; line-height: 1.2; margin-bottom: 5px">
+            원하는 코스를 선택하고 인원수를 입력하세요
+        </p>
+        <p style="text-align: center; font-size: 15px; line-height: 1.2; margin-top: 0; color: #494cff">
+            ( ※ 참고: 예산 금액은 대략적인 추정치로, 실제 비용과 차이가 있을 수 있습니다 )
+        </p>
+
+        <div class="course-container">
+            <div class="course">
+                <img src="../images/Gourmet_Info/Gourmet_food.jpg" alt="언양닭칼국수 이미지" />
+                <!-- 언양닭칼국수 이미지 -->
+                <input type="checkbox" id="noodle" data-price="9500" />
+                <label for="noodle">1. 언양닭칼국수</label>
+                <input type="number" id="noodle-people" placeholder="인원수" min="1" />
+                <p>1인 기준 9,500원으로 예산을 설정했습니다</p>
+            </div>
+
+            <div class="course">
+                <img src="../images/Gourmet_Info/Gourmet_park.jpg" alt="환호 스페이스워크 이미지" />
+                <!-- 환호 스페이스워크 이미지 -->
+                <input type="checkbox" id="space" data-price="0" />
+                <label for="space">2. 환호 스페이스워크</label>
+                <input type="number" id="space-people" placeholder="인원수" min="1" />
+                <p>1인 기준 0원으로 예산을 설정했습니다</p>
+            </div>
+
+            <div class="course">
+                <img src="../images/Gourmet_Info/Gourmet_market.jpg" alt="죽도시장 육전 이미지" />
+                <!-- 죽도시장 육전 이미지 -->
+                <input type="checkbox" id="market" data-price="7000" />
+                <label for="market">3. 죽도시장 육전</label>
+                <input type="number" id="market-people" placeholder="인원수" min="1" />
+                <p>1인 기준 7,000원으로 예산을 설정했습니다</p>
+            </div>
+
+            <div class="course">
+                <img src="../images/Gourmet_Info/Gourmet_cafe.jpg" alt="죽도소년 카페 이미지" />
+                <!-- 죽도소년 카페 이미지 -->
+                <input type="checkbox" id="cafe" data-price="10000" />
+                <label for="cafe">4. 죽도소년 카페</label>
+                <input type="number" id="cafe-people" placeholder="인원수" min="1" />
+                <p>1인 기준 10,000원으로 예산을 설정했습니다</p>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="calculate-button" onclick="calculateBudget()">결과 보기</button>
+            <button class="reset-button" onclick="resetForm()">초기화 하기</button>
+        </div>
+        <div id="result" class="result"></div>
+        <div class="backBtn-container">
+            <a href="../index.html" class="testBtn">메인 페이지로 돌아가기</a>
+        </div>
+        <script>
+            function calculateBudget() {
+                let totalBudget = 0;
+                let validSelection = true;
+                const resultDiv = document.getElementById("result");
+                resultDiv.textContent = ""; // 초기화
+
+                // Define course elements and their people input IDs
+                const courses = [
+                    { id: "noodle", peopleId: "noodle-people", price: 9500 }, // 언양 닭칼국수 가격 예시
+                    { id: "space", peopleId: "space-people", price: 0 }, // 환호 스페이스워크 (무료)
+                    { id: "market", peopleId: "market-people", price: 7000 }, // 죽도시장 육전 가격 예시
+                    { id: "cafe", peopleId: "cafe-people", price: 10000 }, // 죽도소년 카페 가격 예시
+                ];
+
+                courses.forEach((course) => {
+                    const checkbox = document.getElementById(course.id);
+                    const peopleInput = document.getElementById(course.peopleId);
+                    const people = parseInt(peopleInput.value || 0);
+
+                    if (checkbox.checked) {
+                        if (people > 0) {
+                            totalBudget += course.price * people;
+                        } else {
+                            validSelection = false;
+                        }
+                    } else if (people > 0) {
+                        validSelection = false;
+                    }
+                });
+
+                // 결과 출력
+                if (validSelection && totalBudget >= 0) {
+                    resultDiv.textContent = `총 예산: ${totalBudget.toLocaleString()}원`;
+                    resultDiv.style.color = totalBudget === 0 ? "blue" : "green"; // 예산이 0이면 파란색, 양수면 초록색
+                } else {
+                    resultDiv.textContent = "코스를 선택 후 인원을 입력해주세요";
+                    resultDiv.style.color = "red"; // 오류 메시지는 빨간색
+                }
+            }
+
+            function resetForm() {
+                // 체크박스와 숫자 입력값 초기화
+                document.querySelectorAll("input[type='checkbox']").forEach((checkbox) => (checkbox.checked = false));
+                document.querySelectorAll("input[type='number']").forEach((input) => (input.value = ""));
+                document.getElementById("result").textContent = "";
+            }
+        </script>
+    </body>
+</html>

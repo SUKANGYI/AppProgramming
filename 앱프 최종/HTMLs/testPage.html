@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>여행 성향 테스트</title>
+        <link rel="stylesheet" href="../CSSs/testPage.css" />
+        <!-- Google Fonts에서 한글 글꼴 Gowun Batang 불러오기 -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet" />
+    </head>
+
+    <body>
+        <!-- 질문과 답변을 표시할 컨테이너 -->
+        <div id="question-container" class="question-container">
+            <h1 class="question-title">여행 성향 테스트</h1>
+            <!-- 질문 텍스트가 표시되는 영역 -->
+            <div id="question-text" class="question-text"></div>
+            <!-- 질문과 함께 표시될 이미지 영역 (숨겨져 있음) -->
+            <img id="question-image" class="question-image" src="" alt="" style="display: none" />
+            <!-- 답변 버튼들이 표시되는 영역 -->
+            <div id="answer-container" class="answer-container"></div>
+        </div>
+
+        <!-- 결과 표시 영역 -->
+        <div id="result" class="result"></div>
+
+        <script>
+            // 질문 목록과 각 질문에 대한 답변 선택지를 설정
+            const questions = [
+                {
+                    text: "1. 당신이 여행을 하는 이유는 무엇인가요?",
+                    image: "../images/questionImage/travel.jpg", // 질문에 관련된 이미지 경로
+                    answers: [
+                        "바쁜 일상에서 벗어나 자유로움을 느끼기 위해",
+                        "지루한 일상 속 짜릿한 변화를 주기 위해",
+                        "한번도 맛보지 못한 맛있는 음식을 먹기 위해",
+                    ],
+                },
+                {
+                    text: "2. 주로 가고 싶은 장소는?",
+                    image: "../images/questionImage/place.jpg",
+                    answers: [
+                        "사람이 없고, 혼자 즐길 수 있는 장소로 가고 싶어",
+                        "다양한 사람들과 함께 놀 수 있는 곳으로 가고 싶어",
+                        "맛있고 다양한 음식들이 있는 곳으로 가고 싶어",
+                    ],
+                },
+                {
+                    text: "3. 평소 기분 전환이 필요할 때 가장 즐겨 하는 일은? ",
+                    image: "../images/questionImage/diversion.jpg",
+                    answers: [
+                        "느긋하게, 조용한 곳에서 시간 보내기",
+                        "몸을 움직이며 활동적인 시간 보내기",
+                        "색다른 경험을 하나하나 천천히 즐기기",
+                    ],
+                },
+                {
+                    text: "4. 여행 예산이 한정적인 상황, 이것 만큼은 챙겨야 해!",
+                    image: "../images/questionImage/money.jpg",
+                    answers: [
+                        "편안하게 쉴 수 있는 아늑한 공간",
+                        "두근두근거리는 순간을 만들어줄 경험",
+                        "오랫동안 떠올릴 수 있는 맛있는 한 끼",
+                    ],
+                },
+                {
+                    text: "5. 어머 이건 꼭 찍어야 돼!",
+                    image: "../images/questionImage/picture.jpg",
+                    answers: ["나무가 가득한 숲속 산책로", "사람들과 함께 활동하는 순간", "군침이 도는 음식"],
+                },
+                {
+                    text: "6. 여행지에서 가장 관심 있는 활동은?",
+                    image: "../images/questionImage/activity.jpg",
+                    answers: ["자연의 소리를 들으며 쉬기", "물에서 놀기", "먹기"],
+                },
+                {
+                    text: "7. 평소 나의 옷 스타일은?",
+                    image: "../images/questionImage/style.jpg",
+                    answers: ["단정하고 편안한 느낌", "활동성이 좋은 스타일", "가끔 독특한 포인트 더한 옷차림"],
+                },
+                {
+                    text: "8. 소개팅 이상형을 만났다. 대화 속에서 가장 기억에 남는 것은?",
+                    image: "../images/questionImage/talk.jpg",
+                    answers: [
+                        "그 사람이 가보았다던 장소",
+                        "그 사람만이 알고 있는 이야기",
+                        "그 사람의 취향을 엿볼 수 있는 물건",
+                    ],
+                },
+                {
+                    text: "9. 애인과의 데이트를 하게 되었다. 하고 싶은 데이트는?",
+                    image: "../images/questionImage/date.jpg",
+                    answers: [
+                        "서로에 대해 조금 더 알아가는 시간",
+                        "평소와 다른 일상을 함께 경험하는 시간",
+                        "둘만의 새로운 장소를 찾아보는 시간",
+                    ],
+                },
+                {
+                    text: "10. 평소에 브이로그를 챙겨보는 당신! 어떤 브이로그를 볼 것인가?",
+                    image: "../images/questionImage/vlog.jpg",
+                    answers: [
+                        "지치고 힘들 땐, 나만의 시간",
+                        "평범한 여행은 가라! 스릴 오싹 도파민 풀 충전 여행",
+                        "내돈내산 맛집 탐방 브이로그",
+                    ],
+                },
+            ];
+
+            // 각 카테고리별 점수를 세기 위한 객체 초기화
+            let scores = { relax: 0, adventure: 0, food: 0 };
+            let currentQuestion = 0; // 현재 질문 인덱스
+
+            // 첫 번째 질문을 페이지 로드 시 표시
+            displayQuestion();
+
+            // 질문을 화면에 표시하는 함수
+            function displayQuestion() {
+                const questionContainer = document.getElementById("question-container");
+
+                // 모든 질문을 끝냈다면 결과를 표시
+                if (currentQuestion >= questions.length) {
+                    questionContainer.style.display = "none"; // 질문 영역 숨기기
+                    displayResult(); // 결과 표시
+                    return;
+                }
+
+                const questionData = questions[currentQuestion];
+
+                // 질문 텍스트 업데이트
+                document.getElementById("question-text").textContent = questionData.text;
+
+                // 질문과 관련된 이미지 표시
+                const questionImage = document.getElementById("question-image");
+                if (questionData.image) {
+                    questionImage.src = questionData.image;
+                    questionImage.style.display = "block"; // 이미지 표시
+                } else {
+                    questionImage.style.display = "none"; // 이미지가 없을 경우 숨기기
+                }
+
+                // 답변 버튼 생성
+                const answerContainer = document.getElementById("answer-container");
+                answerContainer.innerHTML = ""; // 기존 답변 버튼 초기화
+                questionData.answers.forEach((answer, index) => {
+                    const answerButton = document.createElement("button");
+                    answerButton.className = "answer";
+                    answerButton.textContent = answer;
+
+                    // 각 답변 버튼에 클릭 이벤트 추가 (각 카테고리에 따라 점수 증가)
+                    const choice = index === 0 ? "relax" : index === 1 ? "adventure" : "food";
+                    answerButton.onclick = () => selectAnswer(choice);
+
+                    // 답변 버튼을 화면에 추가
+                    answerContainer.appendChild(answerButton);
+                });
+            }
+
+            // 답변 선택 시 점수 업데이트
+            function selectAnswer(choice) {
+                scores[choice]++; // 선택한 카테고리의 점수 증가
+                currentQuestion++; // 다음 질문으로 이동
+                displayQuestion(); // 다음 질문 표시
+            }
+
+            // 테스트 결과를 화면에 표시하는 함수
+            function displayResult() {
+                const resultContainer = document.getElementById("result");
+                const maxScore = Math.max(scores.relax, scores.adventure, scores.food); // 가장 높은 점수 계산
+                let recommendation = ""; // 추천 코스 텍스트
+                let imageURL = ""; // 추천 코스 이미지 경로
+                let infoPage = ""; // 추천 코스 상세 페이지 링크
+                let Budget = "";
+
+                // 가장 높은 점수에 맞는 추천 코스 설정
+                if (scores.relax === maxScore) {
+                    recommendation = "생각은 내려놓고 온전히 쉬어가는 여유로운 시간 <힐링> 코스를 추천합니다!";
+                    imageURL = "../images/resultImage/healing.png";
+                    infoPage = "./Healing_Info.html"; // 힐링 코스 링크
+                    Budget = "./Healing_budget.html";
+                } else if (scores.adventure === maxScore) {
+                    recommendation = "몸은 힘들지만 즐겁고 뿌듯한 <액티비티> 코스를 추천합니다!";
+                    imageURL = "../images/resultImage/activity.png";
+                    infoPage = "./Activity_Info.html"; // 액티비티 코스 링크
+                    Budget = "./Activity_budget.html";
+                } else if (scores.food === maxScore) {
+                    recommendation = "한입 먹을 때마다 미소가 절로 나는 행복한 <맛집> 코스를 추천합니다!";
+                    imageURL = "../images/resultImage/food.png";
+                    infoPage = "./Gourmet_Info.html"; // 미식 코스 링크
+                    Budget = "./Gourmet_budget.html";
+                }
+
+                // 결과 텍스트 표시
+                resultContainer.innerHTML = recommendation;
+                resultContainer.style.display = "flex"; // 결과 영역 보이기
+                resultContainer.className = "recommendation-text";
+
+                // 결과 이미지 표시
+                const imageElement = document.createElement("img");
+                imageElement.src = imageURL;
+                imageElement.alt = "추천 코스 이미지"; // 이미지 대체 텍스트
+                imageElement.className = "recommendation-image"; // 이미지 스타일 추가
+
+                // 이미지 클릭 시 추천 코스 상세 페이지로 이동
+                imageElement.addEventListener("click", function () {
+                    window.location.href = infoPage;
+                });
+
+                // 뒤로 가기 버튼 추가
+                const backBtn = document.createElement("a");
+                backBtn.innerHTML = "메인 페이지로 돌아가기";
+                backBtn.href = "../index.html";
+                backBtn.className = "testBtn";
+
+                // 예산 보러가기 버튼 추가
+                const budgetBtn = document.createElement("a");
+                budgetBtn.innerHTML = "예산 보러가기";
+                budgetBtn.href = Budget; // 예산 관련 페이지 경로 설정
+                budgetBtn.className = "budgetBtn2";
+
+                // 결과 영역에 이미지와 뒤로 가기 버튼 추가
+                resultContainer.appendChild(imageElement);
+                resultContainer.appendChild(backBtn);
+            }
+        </script>
+    </body>
+</html>
